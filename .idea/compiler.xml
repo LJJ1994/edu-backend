@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="xc-service-manage-course" />
+        <module name="xc-framework-common" />
+        <module name="xc-framework-model" />
+        <module name="freemarkertest" />
+        <module name="xc-framework-utils" />
+        <module name="xc-service-manage-cms-client" />
+        <module name="testrabbitmqproducer" />
+        <module name="xc-service-api" />
+        <module name="xc-service-manage-cms" />
+        <module name="testrabbitmqconsumer" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="freemakertest" target="1.8" />
+      <module name="freemarkertest" target="1.8" />
+      <module name="testrabbitmqconsumer" target="1.8" />
+      <module name="testrabbitmqproducer" target="1.8" />
+      <module name="xc-framework-common" target="1.8" />
+      <module name="xc-framework-model" target="1.8" />
+      <module name="xc-framework-parent" target="1.8" />
+      <module name="xc-framework-utils" target="1.8" />
+      <module name="xc-service-api" target="1.8" />
+      <module name="xc-service-manage-cms" target="1.8" />
+      <module name="xc-service-manage-cms-client" target="1.8" />
+      <module name="xc-service-manage-course" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="freemakertest" options="-parameters" />
+      <module name="freemarkertest" options="-parameters" />
+      <module name="testrabbitmqconsumer" options="-parameters" />
+      <module name="testrabbitmqproducer" options="-parameters" />
+      <module name="xc-framework-common" options="-parameters" />
+      <module name="xc-framework-model" options="-parameters" />
+      <module name="xc-framework-utils" options="-parameters" />
+      <module name="xc-service-api" options="-parameters" />
+      <module name="xc-service-manage-cms" options="-parameters" />
+      <module name="xc-service-manage-cms-client" options="-parameters" />
+      <module name="xc-service-manage-course" options="-parameters" />
+    </option>
+  </component>
+</project>

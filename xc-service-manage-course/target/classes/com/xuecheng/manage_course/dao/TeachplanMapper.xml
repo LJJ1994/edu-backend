@@ -29,7 +29,7 @@
 	            on c.parentid = b.id
 	    where a.parentid = '0'
 	    <if test="_parameter!=null and _parameter!=''">
-            and a.courseid = #{courseId}
+            and a.courseid=#{courseId}
         </if>
 	    ORDER BY
 	        a.orderby,

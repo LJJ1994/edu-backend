@@ -3,19 +3,18 @@ package com.xuecheng.manage_course.service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.xuecheng.framework.domain.course.CourseBase;
+import com.xuecheng.framework.domain.course.CourseMarket;
 import com.xuecheng.framework.domain.course.Teachplan;
 import com.xuecheng.framework.domain.course.ext.CourseInfo;
 import com.xuecheng.framework.domain.course.ext.TeachplanNode;
 import com.xuecheng.framework.domain.course.request.CourseListRequest;
+import com.xuecheng.framework.domain.course.response.AddCourseResult;
 import com.xuecheng.framework.exception.ExceptionCast;
 import com.xuecheng.framework.model.response.CommonCode;
 import com.xuecheng.framework.model.response.QueryResponseResult;
 import com.xuecheng.framework.model.response.QueryResult;
 import com.xuecheng.framework.model.response.ResponseResult;
-import com.xuecheng.manage_course.dao.CourseBaseRepository;
-import com.xuecheng.manage_course.dao.CourseMapper;
-import com.xuecheng.manage_course.dao.CourseTeachplanRepository;
-import com.xuecheng.manage_course.dao.TeachplanMapper;
+import com.xuecheng.manage_course.dao.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +42,9 @@ public class CourseService{
 
     @Autowired
     CourseTeachplanRepository courseTeachplanRepository;
+
+    @Autowired
+    CourseMarketRepository courseMarketRepository;
 
     @Autowired
     CourseMapper courseMapper;
@@ -167,5 +169,101 @@ public class CourseService{
         queryResult.setList(infoList);
         queryResult.setTotal(total);
         return new QueryResponseResult<CourseInfo>(CommonCode.SUCCESS, queryResult);
+    }
+
+    /**
+     * @Description: addCourseBase 添加课程
+     *
+     * @param courseBase
+     * @return: com.xuecheng.framework.domain.course.response.AddCourseResult
+     * @Author: LJJ
+     * @Date: 2020/1/27 16:23
+     */
+    @Transactional
+    public AddCourseResult addCourseBase(CourseBase courseBase) {
+        // 设置课程为未发布状态
+        courseBase.setStatus("202001");
+        courseBaseRepository.save(courseBase);
+        return new AddCourseResult(CommonCode.SUCCESS, courseBase.getId());
+    }
+
+    /**
+     * @Description: getCourseBaseById 获取某个课程基础信息
+     *
+     * @param courseId
+     * @return: com.xuecheng.framework.domain.course.CourseBase
+     * @Author: LJJ
+     * @Date: 2020/1/27 16:34
+     */
+    public CourseBase getCourseBaseById(String courseId) {
+        Optional<CourseBase> optional = courseBaseRepository.findById(courseId);
+        if (optional.isPresent()) {
+            return optional.get();
+        }
+        return null;
+    }
+
+    @Transactional
+    public ResponseResult updateCourseBase(String courseId, CourseBase courseBase) {
+        Optional<CourseBase> optional = courseBaseRepository.findById(courseId);
+        if (!optional.isPresent()) {
+            ExceptionCast.cast(CommonCode.INVALID_PARAM);
+        }
+        CourseBase one = optional.get();
+        one.setName(courseBase.getName());
+        one.setMt(courseBase.getMt());
+        one.setSt(courseBase.getSt());
+        one.setGrade(courseBase.getGrade());
+        one.setStatus(courseBase.getStatus());
+        one.setUsers(courseBase.getUsers());
+        one.setStudymodel(courseBase.getStudymodel());
+        one.setDescription(courseBase.getDescription());
+        courseBaseRepository.save(one);
+        return new ResponseResult(CommonCode.SUCCESS);
+    }
+
+    /**
+     * @Description: getCourseMarketById 通过id查询课程营销信息
+     *
+     * @param courseId 课程id
+     * @return: com.xuecheng.framework.domain.course.CourseMarket
+     * @Author: LJJ
+     * @Date: 2020/1/27 17:05
+     */
+    public CourseMarket getCourseMarketById(String courseId) {
+        Optional<CourseMarket> optional = courseMarketRepository.findById(courseId);
+        if (optional.isPresent()) {
+            return optional.get();
+        }
+        return null;
+    }
+
+    /**
+     * @Description: updateCourseMarket 如果营销信息存在则修改，不存在则添加。
+     *
+     * @param courseId
+ * @param courseMarket
+     * @return: com.xuecheng.framework.domain.course.CourseMarket
+     * @Author: LJJ
+     * @Date: 2020/1/27 17:14
+     */
+    public CourseMarket updateCourseMarket(String courseId, CourseMarket courseMarket) {
+        CourseMarket one = this.getCourseMarketById(courseId);
+        if (one != null) {
+            one.setCharge(courseMarket.getCharge());
+            one.setStartTime(courseMarket.getStartTime());
+            one.setEndTime(courseMarket.getEndTime());
+            one.setValid(courseMarket.getValid());
+            one.setPrice(courseMarket.getPrice());
+            one.setQq(courseMarket.getQq());
+            courseMarketRepository.save(one);
+
+        } else {
+            one = new CourseMarket();
+            BeanUtils.copyProperties(courseMarket, one);
+            one.setId(courseId);
+            courseMarketRepository.save(one);
+        }
+        return one;
     }
 }

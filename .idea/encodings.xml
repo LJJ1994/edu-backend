@@ -3,6 +3,7 @@
   <component name="Encoding">
     <file url="file://D:/BaiduNetdiskDownload/xc-service-manage-course/xc-service-manage-course" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/freemarkertest" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/testfastdfs" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/testrabbitmqconsumer" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/testrabbitmqproducer" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/xc-framework-common" charset="UTF-8" />
@@ -10,6 +11,8 @@
     <file url="file://$PROJECT_DIR$/xc-framework-parent" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/xc-framework-utils" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/xc-service-api" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xc-service-base-filesystem" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/xc-service-base-filesystem/xc-service-base-filesystem" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/xc-service-manage-cms" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/xc-service-manage-cms-client" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/xc-service-manage-course" charset="UTF-8" />

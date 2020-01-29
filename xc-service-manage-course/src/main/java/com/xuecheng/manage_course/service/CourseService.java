@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.xuecheng.framework.domain.course.CourseBase;
 import com.xuecheng.framework.domain.course.CourseMarket;
+import com.xuecheng.framework.domain.course.CoursePic;
 import com.xuecheng.framework.domain.course.Teachplan;
 import com.xuecheng.framework.domain.course.ext.CourseInfo;
 import com.xuecheng.framework.domain.course.ext.TeachplanNode;
@@ -48,6 +49,9 @@ public class CourseService{
 
     @Autowired
     CourseMapper courseMapper;
+
+    @Autowired
+    CoursePicRepository coursePicRepository;
 
     /**
      * @Description: findTeachplanList 查询课程计划
@@ -242,11 +246,12 @@ public class CourseService{
      * @Description: updateCourseMarket 如果营销信息存在则修改，不存在则添加。
      *
      * @param courseId
- * @param courseMarket
+     * @param courseMarket
      * @return: com.xuecheng.framework.domain.course.CourseMarket
      * @Author: LJJ
      * @Date: 2020/1/27 17:14
      */
+    @Transactional
     public CourseMarket updateCourseMarket(String courseId, CourseMarket courseMarket) {
         CourseMarket one = this.getCourseMarketById(courseId);
         if (one != null) {
@@ -265,5 +270,49 @@ public class CourseService{
             courseMarketRepository.save(one);
         }
         return one;
+    }
+
+    // 添加课程图片
+    @Transactional
+    public ResponseResult addCoursePic(String courseId, String pic) {
+        // 查询课程图片
+        // 如果有图片则修改，没有则添加
+        Optional<CoursePic> optional = coursePicRepository.findById(courseId);
+        CoursePic coursePic = null;
+        if (optional.isPresent()) {
+            coursePic = optional.get();
+        }
+        if (coursePic == null) {
+            coursePic = new CoursePic();
+        }
+        coursePic.setCourseid(courseId);
+        coursePic.setPic(pic);
+        coursePicRepository.save(coursePic);
+        return new ResponseResult(CommonCode.SUCCESS);
+    }
+
+    // 查询课程图片信息
+    public CoursePic findCoursePic(String courseId) {
+        Optional<CoursePic> optional = coursePicRepository.findById(courseId);
+        if (optional.isPresent()) {
+            return optional.get();
+        }
+        return null;
+    }
+
+    /**
+     * @Description: deleteCoursePic 删除图片，成功返回1，失败返回0
+     * @param courseId
+     * @return: com.xuecheng.framework.model.response.ResponseResult
+     * @Author: LJJ
+     * @Date: 2020/1/29 18:28
+     */
+    @Transactional
+    public ResponseResult deleteCoursePic(String courseId) {
+        long optional = coursePicRepository.deleteByCourseid(courseId);
+        if (optional > 0) {
+            return new ResponseResult(CommonCode.SUCCESS);
+        }
+        return new ResponseResult(CommonCode.FAIL);
     }
 }

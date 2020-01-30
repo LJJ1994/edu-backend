@@ -10,8 +10,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 * @Modified By:
 */
 @SpringBootApplication
-public class ManageCourseApplication {
+public class ManageFastDFSApplication {
     public static void main(String[] args) throws Exception {
-        SpringApplication.run(ManageCourseApplication.class, args);
+        SpringApplication.run(ManageFastDFSApplication.class, args);
     }
 }

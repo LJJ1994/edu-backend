@@ -33,4 +33,12 @@ public class FreemarkerController {
         map.putAll(body);
         return "index_banner";
     }
+
+    @GetMapping("/course")
+    public String getCourseDetail(Map map) {
+        ResponseEntity<Map> forEntity = restTemplate.getForEntity("http://localhost:31200/course/courseview/4028e581617f945f01617f9dabc40000", Map.class);
+        Map body = forEntity.getBody();
+        map.putAll(body);
+        return "course";
+    }
 }

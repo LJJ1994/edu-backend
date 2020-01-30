@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.ServletOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @Author: LJJ
@@ -30,7 +31,8 @@ public class CmsPagePreviewController extends BaseController {
         if (StringUtils.isNotEmpty(html)) {
             try {
                 ServletOutputStream outputStream = response.getOutputStream();
-                outputStream.write(html.getBytes("utf-8"));
+                response.setHeader("Content-type","text/html;charset=UTF-8");
+                outputStream.write(html.getBytes(StandardCharsets.UTF_8));
             } catch (IOException e) {
                 e.printStackTrace();
             }

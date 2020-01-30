@@ -5,10 +5,12 @@ import com.mongodb.client.gridfs.GridFSBucket;
 import com.mongodb.client.gridfs.GridFSDownloadStream;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import com.xuecheng.framework.domain.cms.CmsPage;
+import com.xuecheng.framework.domain.cms.CmsSite;
 import com.xuecheng.framework.domain.cms.CmsTemplate;
 import com.xuecheng.framework.domain.cms.request.QueryPageRequest;
 import com.xuecheng.framework.domain.cms.response.CmsCode;
 import com.xuecheng.framework.domain.cms.response.CmsPageResult;
+import com.xuecheng.framework.domain.cms.response.CmsPostPageResult;
 import com.xuecheng.framework.exception.ExceptionCast;
 import com.xuecheng.framework.model.response.CommonCode;
 import com.xuecheng.framework.model.response.QueryResponseResult;
@@ -16,6 +18,7 @@ import com.xuecheng.framework.model.response.QueryResult;
 import com.xuecheng.framework.model.response.ResponseResult;
 import com.xuecheng.manage_cms.config.RabbitmqConfig;
 import com.xuecheng.manage_cms.dao.CmsPageRepository;
+import com.xuecheng.manage_cms.dao.CmsSiteRepository;
 import com.xuecheng.manage_cms.dao.CmsTemplateRepository;
 import freemarker.cache.StringTemplateLoader;
 import freemarker.template.Configuration;
@@ -67,6 +70,10 @@ public class PageService {
 
     @Autowired
     RabbitTemplate rabbitTemplate;
+
+    @Autowired
+    CmsSiteRepository cmsSiteRepository;
+
     /**
     * @Description: findList 分页查询页面信息，返回一个List<CmsPage>
     * @Param: [page, size, queryPageRequest]
@@ -379,4 +386,50 @@ public class PageService {
         return cmsPage;
     }
 
+    // 添加页面, 如果存在则更新，不存在则添加
+    public CmsPageResult save(CmsPage cmsPage) {
+        // 校验页面是否存在，根据唯一id
+        CmsPage one = cmsPageRepository.findByPageNameAndSiteIdAndPageWebPath(cmsPage.getPageName(),
+                cmsPage.getSiteId(),
+                cmsPage.getPageWebPath());
+        if (one != null) {
+            return this.edit(one.getPageId(), cmsPage);
+        } else {
+            return this.add(cmsPage);
+        }
+    }
+
+    // 一键发布页面
+    public CmsPostPageResult postPageQuick(CmsPage cmsPage) {
+        // 添加页面，然后返回pageId
+        CmsPageResult save = this.save(cmsPage);
+        if (!save.isSuccess()) {
+            return new CmsPostPageResult(CommonCode.FAIL, null);
+        }
+        CmsPage cmsPage1 = save.getCmsPage();
+        // 获取页面id
+        String pageId = cmsPage1.getPageId();
+        // 发布页面
+        ResponseResult responseResult = this.postPage(pageId);
+        if (!responseResult.isSuccess()) {
+            return new CmsPostPageResult(CommonCode.FAIL, null);
+        }
+        String siteId = cmsPage1.getSiteId();
+        CmsSite cmsSite = this.findCmsSiteById(siteId);
+        String siteDomain = cmsSite.getSiteDomain();
+        String siteWebPath = cmsSite.getSiteWebPath();
+        String pageWebPath = cmsPage1.getPageWebPath();
+        String pageName = cmsPage1.getPageName();
+        // 拼接页面url
+        String pageUrl = siteDomain + siteWebPath + pageWebPath + pageName;
+        return new CmsPostPageResult(CommonCode.SUCCESS, pageUrl);
+    }
+
+    public CmsSite findCmsSiteById(String siteId) {
+        Optional<CmsSite> optional = cmsSiteRepository.findById(siteId);
+        if (optional.isPresent()) {
+            return optional.get();
+        }
+        return null;
+    }
 }

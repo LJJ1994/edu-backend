@@ -4,6 +4,8 @@ import com.xuecheng.framework.domain.cms.CmsPage;
 import com.xuecheng.framework.model.response.ResponseResult;
 import com.xuecheng.framework.model.response.ResultCode;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 
 /**
@@ -13,6 +15,8 @@ import lombok.Data;
 * @Modified By:
 */
 @Data
+@ToString
+@NoArgsConstructor
 public class CmsPageResult extends ResponseResult {
     CmsPage cmsPage;
     public CmsPageResult(ResultCode resultCode,CmsPage cmsPage) {

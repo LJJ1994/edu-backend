@@ -16,8 +16,8 @@ import org.springframework.context.annotation.ComponentScan;
 @EntityScan("com.xuecheng.framework.domain.cms")//扫描实体类
 @ComponentScan(basePackages={"com.xuecheng.framework"})//扫描common包下的类
 @ComponentScan(basePackages={"com.xuecheng.manage_cms_client"})//扫描本项目下的所有类
-public class ManagementApplication {
+public class ManagementRabbitMQApplication {
     public static void main(String[] args) {
-        SpringApplication.run(ManagementApplication.class, args);
+        SpringApplication.run(ManagementRabbitMQApplication.class, args);
     }
 }

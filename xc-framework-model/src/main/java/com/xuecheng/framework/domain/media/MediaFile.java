@@ -8,11 +8,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Date;
 
 /**
- * @Author: mrt.
- * @Description:
- * @Date:Created in 2018/1/24 10:04.
- * @Modified By:
- */
+* @Description: mongoDB 媒资文件
+* @Author: LJJ
+* @Date: 2020/2/11
+* @Modified By:
+*/
 @Data
 @ToString
 @Document(collection = "media_file")

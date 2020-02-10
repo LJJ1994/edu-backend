@@ -135,7 +135,7 @@ public class SearchService {
             Float price = null;
             try {
                 if (sourceAsMap.get("price")!=null) {
-                    price = Float.parseFloat((String) sourceAsMap.get("price"));
+                    price = Float.parseFloat(sourceAsMap.get("price").toString());
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -145,7 +145,7 @@ public class SearchService {
             Float price_old = null;
             try {
                 if (sourceAsMap.get("price_old")!=null) {
-                    price_old = Float.parseFloat((String) sourceAsMap.get("price_old"));
+                    price_old = Float.parseFloat(sourceAsMap.get("price_old").toString());
                 }
             } catch (Exception e) {
                 e.printStackTrace();

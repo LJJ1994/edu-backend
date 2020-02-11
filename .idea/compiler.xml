@@ -19,6 +19,7 @@
         <module name="xc-govern-center" />
         <module name="freemarkertest" />
         <module name="xc-service-manage-media" />
+        <module name="xc-service-manage-media-processor" />
         <module name="xc-service-manage-cms" />
         <module name="xc-service-search" />
         <module name="xc-service-manage-cms-client" />
@@ -42,6 +43,7 @@
       <module name="xc-service-manage-cms-client" target="1.8" />
       <module name="xc-service-manage-course" target="1.8" />
       <module name="xc-service-manage-media" target="1.8" />
+      <module name="xc-service-manage-media-processor" target="1.8" />
       <module name="xc-service-search" target="1.8" />
     </bytecodeTargetLevel>
   </component>
@@ -62,6 +64,7 @@
       <module name="xc-service-manage-cms-client" options="-parameters" />
       <module name="xc-service-manage-course" options="-parameters" />
       <module name="xc-service-manage-media" options="-parameters" />
+      <module name="xc-service-manage-media-processor" options="-parameters" />
       <module name="xc-service-search" options="-parameters" />
     </option>
   </component>

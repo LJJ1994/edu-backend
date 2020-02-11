@@ -4,9 +4,12 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by admin on 2018/3/6.
- */
+/** 
+* @Description:
+* @Author: LJJ
+* @Date: 2020/2/12
+* @Modified By: 
+*/
 public class Mp4VideoUtil extends VideoUtil {
 
     String ffmpeg_path = "D:\\Program Files\\ffmpeg-20180227-fa0c9d6-win64-static\\bin\\ffmpeg.exe";//ffmpeg的安装位置
@@ -66,11 +69,8 @@ public class Mp4VideoUtil extends VideoUtil {
             builder.redirectErrorStream(true);
             Process p = builder.start();
             outstring = waitFor(p);
-
         } catch (Exception ex) {
-
             ex.printStackTrace();
-
         }
         Boolean check_video_time = this.check_video_time(video_path, mp4folder_path + mp4_name);
         if(!check_video_time){

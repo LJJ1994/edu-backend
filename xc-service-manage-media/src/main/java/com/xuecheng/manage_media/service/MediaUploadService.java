@@ -34,7 +34,7 @@ import java.util.*;
  * @Modified By:
  */
 @Service
-public class MediaService {
+public class MediaUploadService {
     private final static Logger LOGGER = LoggerFactory.getLogger(MediaUploadController.class);
 
     @Autowired
@@ -141,7 +141,7 @@ public class MediaService {
      * @param fileExt
      * @return: com.xuecheng.framework.model.response.ResponseResult
      */
-    public ResponseResult mergeChunk(String fileMd5, String fileName, long fileSize, String mimetype, String fileExt) {
+    public ResponseResult mergeChunk(String fileMd5, String fileName, Long fileSize, String mimetype, String fileExt) {
         String chunkFileFolderPath = this.getChunkFileFolderPath(fileMd5);
         File chunkFileFold = new File(chunkFileFolderPath);
         if (!chunkFileFold.exists()) {
@@ -165,20 +165,15 @@ public class MediaService {
         // 获取块文件
         List<File> chunkFiles = getChunkFiles(new File(chunkFileFolderPath));
         // 合并文件
-        File file = null;
-        try {
-            file = mergeFile(mergeFile, chunkFiles);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (file == null) {
+        mergeFile = this.mergeFile(mergeFile, chunkFiles);
+        if (mergeFile == null) {
             ExceptionCast.cast(MediaCode.MERGE_FILE_FAIL);
         }
         // 校验文件MD5
-        boolean checkFileMd5 = checkFileMd5(mergeFile, fileMd5);
-        if (!checkFileMd5) {
-            ExceptionCast.cast(MediaCode.MERGE_FILE_CHECKFAIL);
-        }
+//        boolean checkFileMd5 = checkFileMd5(mergeFile, fileMd5);
+//        if (!checkFileMd5) {
+//            ExceptionCast.cast(MediaCode.MERGE_FILE_CHECKFAIL);
+//        }
         //将文件信息保存到数据库
         MediaFile mediaFile = new MediaFile();
         mediaFile.setFileId(fileMd5);
@@ -286,7 +281,7 @@ public class MediaService {
     }
 
     // 合并文件
-    private File mergeFile(File mergeFile, List<File> chunkFileList) throws IOException {
+    private File mergeFile(File mergeFile, List<File> chunkFileList) {
         try {
             RandomAccessFile raf_write = new RandomAccessFile(mergeFile, "rw");
             byte[] b = new byte[1024];
@@ -337,22 +332,16 @@ public class MediaService {
         if (mergeFile == null || StringUtils.isEmpty(fileMd5)) {
             return false;
         }
-        FileInputStream mergeFileInputStream = null;
         try {
-            mergeFileInputStream = new FileInputStream(mergeFile);
-            String md5Hex = DigestUtils.md5Hex(mergeFileInputStream);
-            if (md5Hex.equalsIgnoreCase(fileMd5)) {
+            FileInputStream inputStream = new FileInputStream(mergeFile);
+            String md5 = DigestUtils.md5Hex(inputStream);
+            if (fileMd5.equalsIgnoreCase(md5)) {
                 return true;
             }
         } catch (IOException e) {
             e.printStackTrace();
             LOGGER.error("check file md5 error, file is: {} md5: {}", mergeFile.getAbsolutePath(), fileMd5);
-        } finally {
-            try {
-                mergeFileInputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            return false;
         }
         return false;
     }

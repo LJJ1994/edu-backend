@@ -1,15 +1,16 @@
 package com.xuecheng.manage_media.controller;
 
-import com.netflix.discovery.converters.Auto;
 import com.xuecheng.api.media.MediaUploadControllerApi;
 import com.xuecheng.framework.domain.media.response.CheckChunkResult;
 import com.xuecheng.framework.model.response.ResponseResult;
-import com.xuecheng.manage_media.service.MediaService;
+import com.xuecheng.manage_media.service.MediaUploadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 /**
  * @Author: LJJ
@@ -22,29 +23,29 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/media/upload")
 public class MediaUploadController implements MediaUploadControllerApi {
     @Autowired
-    MediaService mediaService;
+    MediaUploadService mediaUploadService;
 
     @Override
     @PostMapping("/register")
     public ResponseResult register(String fileMd5, String fileName, long fileSize, String mimetype, String fileExt) {
-        return mediaService.register(fileMd5, fileName, fileSize, mimetype, fileExt);
+        return mediaUploadService.register(fileMd5, fileName, fileSize, mimetype, fileExt);
     }
 
     @Override
     @PostMapping("/checkchunk")
     public CheckChunkResult checkchunk(String fileMd5, Integer chunk, Integer chunkSize) {
-        return mediaService.checkchunk(fileMd5, chunk, chunkSize);
+        return mediaUploadService.checkchunk(fileMd5, chunk, chunkSize);
     }
 
     @Override
     @PostMapping("/uploadchunk")
     public ResponseResult uploadchunk(MultipartFile file, Integer chunk, String fileMd5) {
-        return mediaService.uploadchunk(file, chunk, fileMd5);
+        return mediaUploadService.uploadchunk(file, chunk, fileMd5);
     }
 
     @Override
     @PostMapping("/mergechunks")
-    public ResponseResult mergeChunk(String fileMd5, String fileName, long fileSize, String mimetype, String fileExt) {
-        return mediaService.mergeChunk(fileMd5, fileName, fileSize, mimetype, fileExt);
+    public ResponseResult mergeChunk(String fileMd5, String fileName, Long fileSize, String mimetype, String fileExt) {
+        return mediaUploadService.mergeChunk(fileMd5, fileName, fileSize, mimetype, fileExt);
     }
 }

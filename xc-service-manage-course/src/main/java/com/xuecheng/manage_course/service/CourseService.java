@@ -67,6 +67,12 @@ public class CourseService{
     @Autowired
     CoursePubRepository coursePubRepository;
 
+    @Autowired
+    TeachplanMediaRepository teachplanMediaRepository;
+
+    @Autowired
+    TeachplanRepository teachplanRepository;
+
     // 课程详情cms-page配置信息
     @Value("${course‐publish.dataUrlPre}")
     private String publish_dataUrlPre;
@@ -503,5 +509,38 @@ public class CourseService{
         coursePubNew.setPubTime(format);
         coursePubRepository.save(coursePubNew);
         return coursePubNew;
+    }
+
+    // 保存课程计划对应的媒资信息
+    public ResponseResult savemedia(TeachplanMedia teachplanMedia) {
+        if (teachplanMedia == null) {
+            ExceptionCast.cast(CommonCode.INVALID_PARAM);
+        }
+        String teachplanId = teachplanMedia.getTeachplanId();
+        Optional<Teachplan> teachplanOptional = teachplanRepository.findById(teachplanId);
+        if (!teachplanOptional.isPresent()) {
+            ExceptionCast.cast(CourseCode.COURSE_MEDIA_TEACHPLAN_ISNULL);
+        }
+        Teachplan teachplan = teachplanOptional.get();
+        String grade = teachplan.getGrade();
+        if (grade == null || !grade.equals("3")) {
+            ExceptionCast.cast(CourseCode.COURSE_TEACHPLAN_GRADE_IS_NOT_THEAF); // 选择的节点不是课程计划叶子节点
+        }
+        TeachplanMedia one = null;
+        Optional<TeachplanMedia> teachplanMediaOptional = teachplanMediaRepository.findById(teachplanId);
+        if (teachplanMediaOptional.isPresent()) {
+            one = teachplanMediaOptional.get();
+        } else {
+            one = new TeachplanMedia();
+        }
+        // 保存课程计划对应的媒资信息
+        one.setTeachplanId(teachplanId);
+        one.setCourseId(teachplanMedia.getCourseId());
+        one.setMediaFileOriginalName(teachplanMedia.getMediaFileOriginalName());
+        one.setMediaId(teachplanMedia.getMediaId());
+        one.setMediaUrl(teachplanMedia.getMediaUrl());
+        teachplanMediaRepository.save(one);
+
+        return new ResponseResult(CommonCode.SUCCESS);
     }
 }

@@ -121,4 +121,12 @@ public class CourseController implements CourseControllerApi {
     public CoursePublishResult publish(@PathVariable("courseId") String courseId) {
         return courseService.publish(courseId);
     }
+
+    @Override
+    @PostMapping("/savemedia")
+    public ResponseResult savemedia(@RequestBody TeachplanMedia teachplanMedia) {
+        return courseService.savemedia(teachplanMedia);
+    }
+
+
 }

@@ -1,14 +1,13 @@
 package com.xuecheng.manage_media;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.mongodb.core.mapping.TextScore;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -79,5 +78,54 @@ public class TestMedia {
             raf_read.close();
         }
         raf_write.close();
+    }
+
+    @Test
+    public void testMd5() throws IOException {
+        String md5 = "5fbb79a2016c0eb609ecd0cd3dc48016";
+        String filePath = "E:\\program\\java\\eduFront\\xc-ui-pc-static-portal\\video\\3\\a\\3a65b7d43dd71eec33a1c0c1e50c379d\\3a65b7d43dd71eec33a1c0c1e50c379d.avi";
+        File file = new File(filePath);
+        for(int i = 0; i < 3; i++) {
+            FileInputStream inputStream = new FileInputStream(file);
+            String md5Hex = DigestUtils.md5Hex(inputStream);
+            System.out.println(md5Hex);
+        }
+    }
+
+    @Test
+    public void testMD5String() {
+        String name = "myname";
+        for (int i=0;i<5;i++) {
+            String s = DigestUtils.md5Hex(name);
+            System.out.println(s);
+        }
+    }
+
+    @Test
+    public void testMD5Lucene() throws IOException {
+        String path = "E:\\program\\java\\eduFront\\xc-ui-pc-static-portal\\video\\lucene.avi";
+        String filePath = "E:\\program\\java\\eduFront\\xc-ui-pc-static-portal\\video\\c\\5\\c5c75d70f382e6016d2f506d134eee11\\c5c75d70f382e6016d2f506d134eee11.avi";
+        File file = new File(filePath);
+        File file1 = new File(path);
+        FileInputStream inputStream = new FileInputStream(file);
+        FileInputStream inputStream1 = new FileInputStream(file1);
+        String md5Hex = DigestUtils.md5Hex(inputStream);
+        String md5Hex1 = DigestUtils.md5Hex(inputStream1);
+        System.out.println(md5Hex);
+        System.out.println(md5Hex1);
+    }
+
+    @Test
+    public void testMD5Byte() throws IOException {
+        String path = "E:\\program\\java\\eduFront\\xc-ui-pc-static-portal\\video\\lucene.avi";
+        String filePath = "E:\\program\\java\\eduFront\\xc-ui-pc-static-portal\\video\\c\\5\\c5c75d70f382e6016d2f506d134eee11\\c5c75d70f382e6016d2f506d134eee11.avi";
+        File file = new File(filePath);
+        File file1 = new File(path);
+        FileInputStream inputStream = new FileInputStream(file);
+        FileInputStream inputStream1 = new FileInputStream(file1);
+        String md5Hex = DigestUtils.md5Hex(inputStream);
+        String md5Hex1 = DigestUtils.md5Hex(inputStream1);
+        System.out.println(md5Hex);
+        System.out.println(md5Hex1);
     }
 }

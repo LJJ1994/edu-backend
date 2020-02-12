@@ -67,4 +67,7 @@ public interface CourseControllerApi {
 
     @ApiOperation("发布课程")
     public CoursePublishResult publish(String courseId);
+
+    @ApiOperation("保存课程计划对于的媒资信息")
+    public ResponseResult savemedia(TeachplanMedia teachplanMedia);
 }

@@ -6,6 +6,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 @Api(value = "媒资管理接口", description = "提供文件上传，文件处理等接口")
 public interface MediaUploadControllerApi {
     @ApiOperation("文件上传注册")
@@ -28,7 +30,7 @@ public interface MediaUploadControllerApi {
     @ApiOperation("合并分块")
     public ResponseResult mergeChunk(String fileMd5,
                                      String fileName,
-                                     long fileSize,
+                                     Long fileSize,
                                      String mimetype,
                                      String fileExt);
 }

@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -72,6 +73,9 @@ public class CourseService{
 
     @Autowired
     TeachplanRepository teachplanRepository;
+
+    @Autowired
+    TeachplanMediaPubRepository teachplanMediaPubRepository;
 
     // 课程详情cms-page配置信息
     @Value("${course‐publish.dataUrlPre}")
@@ -430,9 +434,24 @@ public class CourseService{
         // 保存课程索引信息
         CoursePub coursePub = createCoursePub(courseId);
         saveCoursePub(courseId, coursePub);
-
+        // 保存ES课程计划媒资信息
+        this.saveTeachplanMediaPub(courseId);
         String pageUrl = cmsPostPageResult.getPageUrl();
         return new CoursePublishResult(CommonCode.SUCCESS, pageUrl);
+    }
+
+    // 保存ES课程计划媒资信息
+    private void saveTeachplanMediaPub(String courseId) {
+        List<TeachplanMedia> teachplanMediaList = teachplanMediaRepository.findByCourseId(courseId);
+        // 先删除表里的数据，保证更改或者更新课程信息的时候能及时修改ES中的数据
+        long l = teachplanMediaPubRepository.deleteByCourseId(courseId);
+        List<TeachplanMediaPub> teachplanMediaPubList = new ArrayList<>();
+        for (TeachplanMedia teachplanMedia:teachplanMediaList) {
+            TeachplanMediaPub teachplanMediaPub = new TeachplanMediaPub();
+            BeanUtils.copyProperties(teachplanMedia, teachplanMediaPub);
+            teachplanMediaPub.setTimestamp(new Date());
+            teachplanMediaPubRepository.save(teachplanMediaPub);
+        }
     }
     // 更新课程发布状态
     private CourseBase saveCoursePubState(String courseId) {

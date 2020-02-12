@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
-@Api(value = "媒资管理接口", description = "提供文件上传，文件处理等接口")
+@Api(value = "媒资管理接口", description = "提供文件上传，文件处理等接口", tags = {"媒资管理接口o"})
 public interface MediaUploadControllerApi {
     @ApiOperation("文件上传注册")
     public ResponseResult register(String fileMd5,

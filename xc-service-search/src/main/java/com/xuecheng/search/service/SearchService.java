@@ -124,8 +124,11 @@ public class SearchService {
         for (SearchHit hit:searchHits) {
             CoursePub coursePub = new CoursePub();
             Map<String, Object> sourceAsMap = hit.getSourceAsMap();
+            String courseId = (String) sourceAsMap.get("id");
+            coursePub.setId(courseId);
             // 名称
             String name = (String) sourceAsMap.get("name");
+            coursePub.setName(name);
             // 高亮字段
             Map<String, HighlightField> highlightFields = hit.getHighlightFields();
             if (highlightFields != null) {
@@ -139,7 +142,7 @@ public class SearchService {
                     name = stringBuffer.toString();
                 }
             }
-            coursePub.setName(name);
+
             // 图片
             String pic = (String) sourceAsMap.get("pic");
             coursePub.setPic(pic);

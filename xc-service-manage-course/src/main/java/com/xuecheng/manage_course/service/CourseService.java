@@ -26,6 +26,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -422,6 +423,7 @@ public class CourseService{
         return new CoursePublishResult(CommonCode.SUCCESS, pageUrl);
     }
     // 课程发布
+    @Transactional
     public CoursePublishResult publish(String courseId) {
         CourseBase one = this.findCourseBaseById(courseId);
         // 发布页面
@@ -441,7 +443,8 @@ public class CourseService{
     }
 
     // 保存ES课程计划媒资信息
-    private void saveTeachplanMediaPub(String courseId) {
+    @Transactional
+    void saveTeachplanMediaPub(String courseId) {
         List<TeachplanMedia> teachplanMediaList = teachplanMediaRepository.findByCourseId(courseId);
         // 先删除表里的数据，保证更改或者更新课程信息的时候能及时修改ES中的数据
         long l = teachplanMediaPubRepository.deleteByCourseId(courseId);

@@ -12,10 +12,11 @@ import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * @author Administrator
- * @version 1.0
- * @create 2018-07-14 11:11
- **/
+* @Description: 学习中心
+* @Author: LJJ
+* @Date: 2020/2/13
+* @Modified By:
+*/
 @EnableFeignClients
 @EnableDiscoveryClient
 @SpringBootApplication
@@ -32,6 +33,7 @@ public class LearningApplication {
     @Bean
     @LoadBalanced
     public RestTemplate restTemplate() {
+
         return new RestTemplate(new OkHttp3ClientHttpRequestFactory());
     }
 

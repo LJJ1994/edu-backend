@@ -13,7 +13,9 @@ import lombok.ToString;
 
 @ToString
 public enum LearningCode implements ResultCode {
-    LEARNING_GETMEDIA_ERROR(false,23001,"获取学习地址失败！");
+    LEARNING_GETMEDIA_ERROR(false,23001,"获取学习地址失败！"),
+    CHOOSECOURSE_USERISNULL(false,23001,"操作用户为空！"),
+    CHOOSECOURSE_TASKISNULL(false,23001,"添加选课消息队列任务为空！");
     //操作代码
     boolean success;
     //操作代码

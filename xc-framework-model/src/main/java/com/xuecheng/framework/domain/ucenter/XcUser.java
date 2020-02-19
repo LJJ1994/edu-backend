@@ -7,9 +7,12 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.util.Date;
 
-/**
- * Created by admin on 2018/3/19.
- */
+/** 
+* @Description: 
+* @Author: LJJ
+* @Date: 2020/2/15
+* @Modified By: 
+*/
 @Data
 @ToString
 @Entity
@@ -36,6 +39,4 @@ public class XcUser {
     private Date createTime;
     @Column(name="update_time")
     private Date updateTime;
-
-
 }

@@ -124,8 +124,9 @@ public class SearchService {
         for (SearchHit hit:searchHits) {
             CoursePub coursePub = new CoursePub();
             Map<String, Object> sourceAsMap = hit.getSourceAsMap();
-            String courseId = (String) sourceAsMap.get("id");
-            coursePub.setId(courseId);
+            // 课程id
+//            String courseId = (String) sourceAsMap.get("id");
+//            coursePub.setId(courseId);
             // 名称
             String name = (String) sourceAsMap.get("name");
             coursePub.setName(name);

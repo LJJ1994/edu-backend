@@ -7,12 +7,21 @@ import com.xuecheng.framework.domain.course.ext.TeachplanNode;
 import com.xuecheng.framework.domain.course.request.CourseListRequest;
 import com.xuecheng.framework.domain.course.response.AddCourseResult;
 import com.xuecheng.framework.domain.course.response.CoursePublishResult;
+import com.xuecheng.framework.exception.ExceptionCast;
+import com.xuecheng.framework.exception.ExceptionCatch;
 import com.xuecheng.framework.model.response.CommonCode;
 import com.xuecheng.framework.model.response.QueryResponseResult;
 import com.xuecheng.framework.model.response.ResponseResult;
+import com.xuecheng.framework.utils.XcOauth2Util;
 import com.xuecheng.manage_course.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @Author: LJJ
@@ -28,6 +37,7 @@ public class CourseController implements CourseControllerApi {
     CourseService courseService;
 
     // 查询课程计划
+    @PreAuthorize("hasAuthority('course_teachplans_list')")
     @Override
     @GetMapping("/teachplan/list/{courseId}")
     public TeachplanNode findTeachplanList(@PathVariable("courseId") String courseId) {
@@ -41,11 +51,25 @@ public class CourseController implements CourseControllerApi {
     }
 
     @Override
+    @DeleteMapping("/teachplan/delete")
+    public ResponseResult deleteTeachplan(@RequestParam("id") String id) {
+
+        return courseService.deleteTeachplan(id);
+    }
+
+    @Override
     @GetMapping("/coursebase/list/{page}/{size}")
     public QueryResponseResult<CourseInfo> findCourseList(@PathVariable("page") int page,
                                                           @PathVariable("size") int size,
                                                           CourseListRequest courseListRequest) {
-        return courseService.findCourseList(page, size, courseListRequest);
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        XcOauth2Util xcOauth2Util = new XcOauth2Util();
+        XcOauth2Util.UserJwt userJwt = xcOauth2Util.getUserJwtFromHeader(request);
+        if (userJwt == null) {
+            ExceptionCast.cast(CommonCode.UNAUTHENTICATED);
+        }
+        String companyId = userJwt.getCompanyId();
+        return courseService.findCourseList(companyId, page, size, courseListRequest);
     }
 
     @Override
@@ -54,6 +78,7 @@ public class CourseController implements CourseControllerApi {
         return courseService.addCourseBase(courseBase);
     }
 
+//    @PreAuthorize("hasAuthority('course-base')")
     @Override
     @GetMapping("/coursebase/get/{courseId}")
     public CourseBase getCourseBaseById(@PathVariable("courseId") String courseId) throws RuntimeException {
@@ -93,15 +118,16 @@ public class CourseController implements CourseControllerApi {
     }
 
     @Override
-    @GetMapping("/coursepic/list/{courseId}")
-    public CoursePic findCoursePic(@PathVariable("courseId") String courseId) {
-        return courseService.findCoursePic(courseId);
-    }
-
-    @Override
     @DeleteMapping("/coursepic/delete")
     public ResponseResult deleteCoursePic(@RequestParam("courseId") String courseId) {
         return courseService.deleteCoursePic(courseId);
+    }
+
+    @PreAuthorize("hasAuthority('course_find_list')")
+    @Override
+    @GetMapping("/coursepic/list/{courseId}")
+    public CoursePic findCoursePic(@PathVariable("courseId") String courseId) {
+        return courseService.findCoursePic(courseId);
     }
 
     @Override
@@ -127,6 +153,4 @@ public class CourseController implements CourseControllerApi {
     public ResponseResult savemedia(@RequestBody TeachplanMedia teachplanMedia) {
         return courseService.savemedia(teachplanMedia);
     }
-
-
 }

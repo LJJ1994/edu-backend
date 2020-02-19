@@ -28,6 +28,9 @@ public interface CourseControllerApi {
     @ApiOperation("添加课程计划")
     public ResponseResult addTeachplan(Teachplan teachplan);
 
+    @ApiOperation("删除课程计划")
+    public ResponseResult deleteTeachplan(String teachplanId);
+
     @ApiOperation("查询课程列表")
     public QueryResponseResult<CourseInfo> findCourseList(
             int page,

@@ -7,9 +7,12 @@ import lombok.ToString;
 
 import java.util.List;
 
-/**
- * Created by admin on 2018/3/20.
- */
+/** 
+* @Description: 
+* @Author: LJJ
+* @Date: 2020/2/15
+* @Modified By: 
+*/
 @Data
 @ToString
 public class XcUserExt extends XcUser {

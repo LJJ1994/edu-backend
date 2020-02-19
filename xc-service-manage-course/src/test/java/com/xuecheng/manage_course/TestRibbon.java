@@ -34,4 +34,11 @@ public class TestRibbon {
             System.out.println(body);
         }
     }
+
+    @Test
+    public void testSubstring() {
+        String token = "Bearer lkjdsad&#das";
+        String subToken = token.substring(7);
+        System.out.println(subToken);
+    }
 }

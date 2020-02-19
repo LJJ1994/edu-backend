@@ -184,6 +184,17 @@ public class CourseService{
         return new ResponseResult(CommonCode.SUCCESS);
     }
 
+    // 删除课程计划
+    @Transactional
+    public ResponseResult deleteTeachplan(String teachplanId) {
+        Optional<Teachplan> optional = courseTeachplanRepository.findById(teachplanId);
+        if (!optional.isPresent()) {
+            return new ResponseResult(CommonCode.FAIL);
+        }
+        courseTeachplanRepository.deleteById(teachplanId);
+        return new ResponseResult(CommonCode.SUCCESS);
+    }
+
     /**
      * @Description: 分页查询我的课程，使用pagehelper分页插件
      *
@@ -194,7 +205,7 @@ public class CourseService{
      * @Author: LJJ
      * @Date: 2020/1/27 15:14
      */
-    public QueryResponseResult<CourseInfo> findCourseList(int page, int size, CourseListRequest courseListRequest) {
+    public QueryResponseResult<CourseInfo> findCourseList(String companyId, int page, int size, CourseListRequest courseListRequest) {
         if (courseListRequest == null) {
             courseListRequest = new CourseListRequest();
         }
@@ -204,6 +215,7 @@ public class CourseService{
         if (size <= 0) {
             size = 10;
         }
+        courseListRequest.setCompanyId(companyId);
         PageHelper.startPage(page, size);
         Page<CourseInfo> courseListPage = courseMapper.findCourseListPage(courseListRequest);
         List<CourseInfo> infoList = courseListPage.getResult();
@@ -213,6 +225,8 @@ public class CourseService{
         queryResult.setTotal(total);
         return new QueryResponseResult<CourseInfo>(CommonCode.SUCCESS, queryResult);
     }
+
+
 
     /**
      * @Description: addCourseBase 添加课程
@@ -565,4 +579,6 @@ public class CourseService{
 
         return new ResponseResult(CommonCode.SUCCESS);
     }
+
+
 }

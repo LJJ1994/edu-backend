@@ -1,5 +1,6 @@
 package com.xuecheng.order;
 
+import com.alibaba.fastjson.JSON;
 import com.github.wxpay.sdk.MyConfig;
 import com.github.wxpay.sdk.WXPay;
 import org.apache.commons.lang3.StringUtils;
@@ -75,5 +76,13 @@ public class ConfigTest {
         Date startTime = simpleDateFormat.parse(s);
         Date endTime = simpleDateFormat.parse(e);
 
+    }
+
+    @Test
+    public void testMap() {
+        String json = "[{\"endTime\":\"2020-02-22 18:02:11\",\"id\":\"4028e581706c49a001706c4b38be0000\",\"itemId\":\"4028e581617f945f01617f9dabc40000\",\"itemNum\":1,\"itemPrice\":0.01,\"orderNumber\":\"548440621606641664\",\"startTime\":\"2020-02-22 17:47:11\",\"valid\":\"204001\"}]";
+        List list = JSON.parseObject(json, List.class);
+        Map map = (Map)list.get(0);
+        String itemId = (String) map.get("itemId");
     }
 }

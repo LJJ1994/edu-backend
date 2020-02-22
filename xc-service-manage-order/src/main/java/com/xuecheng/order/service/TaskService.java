@@ -87,4 +87,14 @@ public class TaskService {
             xcTaskRepository.delete(xcTask);
         }
     }
+
+    // 向xc_task表中插入选课记录
+    @Transactional
+    public void saveXcTask(XcTask xcTask) {
+        try {
+            xcTaskRepository.save(xcTask);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

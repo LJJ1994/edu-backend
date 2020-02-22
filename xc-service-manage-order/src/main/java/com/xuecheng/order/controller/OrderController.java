@@ -1,5 +1,6 @@
 package com.xuecheng.order.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.github.wxpay.sdk.WXPayUtil;
 import com.github.wxpay.sdk.WXPayXmlUtil;
 import com.xuecheng.api.order.OrderControllerApi;
@@ -11,8 +12,11 @@ import com.xuecheng.framework.domain.order.response.CreateOrderResult;
 import com.xuecheng.framework.domain.order.response.OrderResult;
 import com.xuecheng.framework.domain.order.response.PayOrderResult;
 import com.xuecheng.framework.domain.order.response.PayQrcodeResult;
+import com.xuecheng.framework.domain.task.XcTask;
 import com.xuecheng.framework.utils.ConvertUtils;
+import com.xuecheng.order.config.RabbitMQConfig;
 import com.xuecheng.order.service.OrderService;
+import com.xuecheng.order.service.TaskService;
 import com.xuecheng.order.service.WxPayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,7 +24,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -38,6 +45,9 @@ public class OrderController implements OrderControllerApi {
 
     @Autowired
     WxPayService wxPayService;
+
+    @Autowired
+    TaskService taskService;
 
     @Value("${wxpay.query_url}")
     private String queryUrl;
@@ -61,7 +71,7 @@ public class OrderController implements OrderControllerApi {
         return wxPayService.createWeixinQrcode(request);
     }
 
-    // 微信回调统治 notify_url
+    // 微信回调通知 notify_url
     @RequestMapping("/wxpay/url")
     public void fallback(HttpServletRequest request, HttpServletResponse response) {
         try {
@@ -81,6 +91,38 @@ public class OrderController implements OrderControllerApi {
                     orderService.savePayOrder(transactionId, orderNumber);
                     // 修改订单表
                     orderService.updateXcOrders(orderNumber);
+                    // 向xc_task 任务表插入选课记录
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    OrderResult orderResult = orderService.getOrder(orderNumber);
+                    XcOrders xcOrders = orderResult.getXcOrders();
+                    String start_time = xcOrders.getStartTime();
+                    Date startTime = format.parse(start_time);
+                    String routingKey = RabbitMQConfig.XC_LEARNING_ADDCHOOSECOURSE_KEY;
+                    String exchange = RabbitMQConfig.EX_LEARNING_ADDCHOOSECOURSE;
+                    String userId = xcOrders.getUserId();
+                    String details = xcOrders.getDetails();
+                    List list = JSON.parseObject(details, List.class);
+                    Map mapString = (Map)list.get(0);
+                    String courseId = (String) mapString.get("itemId");
+
+                    XcTask xcTask = new XcTask();
+                    xcTask.setCreateTime(startTime);
+                    xcTask.setMqExchange(exchange);
+                    xcTask.setMqRoutingkey(routingKey);
+                    xcTask.setUpdateTime(startTime);
+                    xcTask.setDeleteTime(startTime);
+                    xcTask.setErrormsg("");
+                    xcTask.setStatus("105001"); // 未执行
+                    xcTask.setTaskType("106001"); // 选课
+                    xcTask.setVersion(1);
+
+                    Map<String, String> requestBody = new HashMap<>();
+                    requestBody.put("userId", userId);
+                    requestBody.put("courseId", courseId);
+                    String jsonString = JSON.toJSONString(requestBody);
+                    xcTask.setRequestBody(jsonString);
+                    // 插入选课任务表
+                    taskService.saveXcTask(xcTask);
                 }
             }
             // 响应结果返回给微信

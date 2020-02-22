@@ -30,6 +30,7 @@
         <option value="$PROJECT_DIR$/xc-service-ucenter/pom.xml" />
         <option value="$PROJECT_DIR$/xc-govern-gateway/pom.xml" />
         <option value="$PROJECT_DIR$/xc-service-manage-order/pom.xml" />
+        <option value="$MAVEN_REPOSITORY$/java_sdk_v3.0.9/pom.xml" />
       </list>
     </option>
   </component>

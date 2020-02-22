@@ -17,18 +17,19 @@
         <module name="testrabbitmqproducer" />
         <module name="testfastdfs" />
         <module name="xc-service-manage-order" />
-        <module name="testrabbitmqconsumer" />
+        <module name="xc-govern-gateway" />
+        <module name="wxpay-sdk" />
         <module name="xc-framework-common" />
         <module name="xc-service-learning" />
         <module name="xc-service-ucenter-auth" />
         <module name="xc-govern-center" />
         <module name="freemarkertest" />
         <module name="xc-service-manage-media" />
+        <module name="xc-service-manage-media-processor" />
         <module name="xc-service-manage-cms" />
         <module name="xc-service-search" />
-        <module name="xc-govern-gateway" />
         <module name="xc-service-manage-cms-client" />
-        <module name="xc-service-manage-media-processor" />
+        <module name="testrabbitmqconsumer" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -36,6 +37,7 @@
       <module name="testfastdfs" target="1.8" />
       <module name="testrabbitmqconsumer" target="1.8" />
       <module name="testrabbitmqproducer" target="1.8" />
+      <module name="wxpay-sdk" target="1.5" />
       <module name="xc-framework-common" target="1.8" />
       <module name="xc-framework-model" target="1.8" />
       <module name="xc-framework-parent" target="1.8" />

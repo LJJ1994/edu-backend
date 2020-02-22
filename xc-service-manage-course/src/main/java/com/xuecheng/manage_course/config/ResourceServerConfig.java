@@ -72,7 +72,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .antMatchers("/v2/api-docs", "/swagger-resources/configuration/ui",
                         "/swagger-resources","/swagger-resources/configuration/security",
                         "/swagger-ui.html", "/webjars/**",
-                        "/course/coursebase/**", "/course/coursepic/list/**", "/course/courseview/**").permitAll()
+                        "/course/coursebase/**", "/course/coursepic/list/**", "/course/courseview/**", "/course/coursemarket/**").permitAll()
                 .anyRequest()
                 .authenticated();
     }

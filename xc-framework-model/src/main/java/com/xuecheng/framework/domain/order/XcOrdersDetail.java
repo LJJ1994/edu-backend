@@ -8,9 +8,6 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * Created by admin on 2018/2/10.
- */
 @Data
 @ToString
 @Entity
@@ -32,7 +29,7 @@ public class XcOrdersDetail implements Serializable {
     private Float itemPrice;
     private String valid;
     @Column(name = "start_time")
-    private Date startTime;
+    private String startTime;
     @Column(name = "end_time")
-    private Date endTime;
+    private String endTime;
 }

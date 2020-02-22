@@ -1,5 +1,8 @@
 package com.xuecheng.order;
 
+import com.github.wxpay.sdk.MyConfig;
+import com.github.wxpay.sdk.WXPay;
+import com.xuecheng.framework.interceptor.FeignClientInterceptor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -21,13 +24,29 @@ import org.springframework.web.client.RestTemplate;
 @ComponentScan(basePackages={"com.xuecheng.order"})//扫描本项目下的所有类
 @SpringBootApplication
 public class ManageOrderApplication {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         SpringApplication.run(ManageOrderApplication.class, args);
     }
 
     @Bean
     @LoadBalanced
     public RestTemplate restTemplate() {
+
         return new RestTemplate(new OkHttp3ClientHttpRequestFactory());
+    }
+
+    @Bean   // Feigh远程调用拦截器
+    public FeignClientInterceptor feignClientInterceptor() {
+        return new FeignClientInterceptor();
+    }
+
+    @Bean
+    public WXPay wxPay() {
+        try {
+            return new WXPay(new MyConfig());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

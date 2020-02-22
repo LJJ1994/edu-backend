@@ -26,11 +26,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * http请求客户端
- * 
- * @author Administrator
- * 
- */
+* @Description: Http请求客户端
+* @Author: LJJ
+* @Date: 2020/2/22
+* @Modified By:
+*/
 public class HttpClient {
 	private String url;
 	private Map<String, String> param;

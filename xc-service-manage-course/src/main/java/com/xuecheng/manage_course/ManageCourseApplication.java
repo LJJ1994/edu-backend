@@ -39,7 +39,6 @@ public class ManageCourseApplication {
 
     @Bean   // Feigh远程调用拦截器
     public FeignClientInterceptor feignClientInterceptor() {
-
         return new FeignClientInterceptor();
     }
 }

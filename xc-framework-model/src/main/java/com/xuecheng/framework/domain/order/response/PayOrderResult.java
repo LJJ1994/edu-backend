@@ -13,6 +13,7 @@ import lombok.ToString;
 @ToString
 public class PayOrderResult extends ResponseResult {
     public PayOrderResult(ResultCode resultCode) {
+
         super(resultCode);
     }
     public PayOrderResult(ResultCode resultCode,XcOrdersPay xcOrdersPay) {

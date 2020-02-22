@@ -17,7 +17,10 @@ public enum OrderCode implements ResultCode {
     ORDER_FINISH_NOTFOUNDORDER(false,41004,"找不到订单信息！"),
     Pay_NOTFOUNDORDER(false,41010,"找不到要支付的订单！"),
     Pay_USERERROR(false,41011,"支付用户与订单用户不一致！"),
-    Pay_NOTFOUNDPAY(false,41012,"支付记录不存在！");
+    Pay_NOTFOUNDPAY(false,41012,"支付记录不存在！"),
+    Pay_ORDER_EXPIRED(false,41013,"订单已过期！"),
+    Pay_ORDER_NOT_PAY(false,41014,"订单支付状态异常!"),
+    ORDER_ORDERNUMERROR_NULL(false,41015,"订单号为空！");
 
     //操作代码
     @ApiModelProperty(value = "媒资系统操作是否成功", example = "true", required = true)
